@@ -2,6 +2,63 @@
 
 A FastAPI backend service that uses LangChain and OpenAI to analyze resumes and provide intelligent responses to queries about the resume content.
 
+Frontend Repository: [Resume Chat AI UI](https://github.com/harshit17sharma09/resume-with-AI-UI)
+
+## System Design
+
+### Architecture Overview
+![System Architecture](docs/system-architecture.png)
+
+### LangChain Implementation Flow
+```mermaid
+graph TD
+    A[PDF Upload] --> B[PyPDFLoader]
+    B --> C[Text Splitter]
+    C --> D[Document Chunks]
+    D --> E[OpenAI Embeddings]
+    E --> F[FAISS Vector Store]
+    
+    G[User Query] --> H[Similarity Search]
+    F --> H
+    H --> I[Relevant Context]
+    
+    I --> J[Chat Memory]
+    J --> K[Prompt Template]
+    K --> L[ChatOpenAI/GPT-4]
+    L --> M[Response]
+```
+
+### Key Components
+
+1. **Document Processing**
+   - PyPDFLoader: Extracts text from PDF resumes
+   - CharacterTextSplitter: Splits text into manageable chunks
+   - Chunk size: 1000 characters
+   - Overlap: 200 characters
+
+2. **Vector Store**
+   - OpenAI Embeddings: Converts text to vectors
+   - FAISS: Stores vectors for similarity search
+   - In-memory storage per user session
+
+3. **Conversation Management**
+   - ConversationBufferMemory: Maintains chat history
+   - User-specific memory storage
+   - Context-aware responses
+
+4. **LLM Integration**
+   - Model: GPT-4
+   - Temperature: 0.7
+   - Custom prompt templates
+   - Context window: Up to 8k tokens
+
+## Screenshots
+
+### Home Interface
+![Home Interface](docs/home.png)
+### Chat Interface
+![Chat Interface](docs/chat.png)
+
 ## Features
 
 - PDF resume processing and analysis
